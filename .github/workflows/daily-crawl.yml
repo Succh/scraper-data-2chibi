@@ -68,6 +68,15 @@ jobs:
         env:
           PYTHONUNBUFFERED: "1"
 
+      # ── 生成 HTML 日报 ──────────────────────────
+      - name: 生成 HTML 日报
+        working-directory: .
+        run: |
+          python3 generate_report.py
+          mkdir -p docs
+          cp output/$(date +%Y-%m-%d)_report.html docs/index.html
+          echo "✅ HTML 日报已生成"
+
       # ── 提交结果到仓库 ──────────────────────────
       - name: 提交结果
         working-directory: .
@@ -82,7 +91,7 @@ jobs:
           fi
           
           # 添加 output 目录的变更
-          git add output/ index.html .github/
+          git add output/ docs/ .github/
           
           # 提交
           TODAY=$(date +%Y-%m-%d)
