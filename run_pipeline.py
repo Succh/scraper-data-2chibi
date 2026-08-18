@@ -231,6 +231,17 @@ def main():
         rc = run_script("send.py", [str(enriched_file)])
         return
 
+    if "--supabase" in args:
+        today = today_str()
+        enriched_file = OUTPUT_DIR / f"{today}_enriched.json"
+        if not enriched_file.exists():
+            print(f"❌ 找不到富化数据: {enriched_file}")
+            print(f"   先运行 python3 run_pipeline.py --enrich")
+            return
+        print(f"📂 使用富化数据: {enriched_file}")
+        rc = run_script("send_supabase.py", [str(enriched_file)])
+        return
+
     # ═══════════════════════════════════════════
     # 完整管道: scrape → enrich → dedup → send
     # ═══════════════════════════════════════════
@@ -296,12 +307,23 @@ def main():
         print(f"\n❌ 写入失败，退出码 {rc}")
         return
 
+    # Step 5: 写入 Supabase（可选，如果配置了的话）
+    supabase_url = os.environ.get("SUPABASE_URL", "")
+    supabase_key = os.environ.get("SUPABASE_KEY", "")
+    if supabase_url and supabase_key:
+        print(f"\n☁️  [5/5] 写入 Supabase 数据库...")
+        rc = run_script("send_supabase.py", [str(deduped_file)])
+        if rc != 0:
+            print(f"  ⚠️ Supabase 写入失败（不影响主流程）")
+    else:
+        print(f"\n⏭️  跳过 Supabase（未配置 SUPABASE_URL/SUPABASE_KEY）")
+
     # 更新去重缓存
     update_dedup_after_send(new_items)
 
     print(f"\n{'━'*50}")
     print(f"  ✅ 管道运行完成!")
-    print(f"     采集 → 富化 → 去重 → Notion 写入")
+    print(f"     采集 → 富化 → 去重 → Notion 写入 → Supabase")
     print(f"     本次新增: {len(new_items)} 条")
     print(f"{'━'*50}")
 
