@@ -120,6 +120,7 @@ def build_feedback_hint(weights):
     
     return "\n".join(hints)
 
+def main():
     # 读取反馈权重
     weights = load_feedback_weights()
     feedback_hint = build_feedback_hint(weights)
