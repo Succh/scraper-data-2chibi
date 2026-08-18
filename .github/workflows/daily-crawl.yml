@@ -1,0 +1,102 @@
+name: 二次元趣闻每日采集
+
+on:
+  schedule:
+    # 每天北京时间 08:00 执行 (UTC 00:00)
+    - cron: '0 0 * * *'
+  # 允许手动触发
+  workflow_dispatch:
+
+# 权限：需要写入仓库权限来提交结果
+permissions:
+  contents: write
+
+jobs:
+  crawl:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      # ── 检出代码 ──────────────────────────────
+      - name: 检出代码
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      # ── 设置 Python ──────────────────────────
+      - name: 设置 Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      # ── 安装依赖 ──────────────────────────────
+      - name: 安装依赖
+        run: |
+          python -m pip install --upgrade pip
+          pip install aiohttp
+          # bilibili-api-python 可选（直接调用 API 时不需要）
+          # pip install bilibili-api-python
+
+      # ── 配置环境变量 ──────────────────────────
+      - name: 创建 .env 文件
+        working-directory: scraper-data-2chibi
+        run: |
+          cat > .env << EOF
+          GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}
+          NOTION_TOKEN=${{ secrets.NOTION_TOKEN }}
+          NOTION_DATABASE_ID=${{ secrets.NOTION_DATABASE_ID }}
+          EOF
+          echo "✅ .env 已创建"
+          # 验证 key 存在（不输出值）
+          grep -q "GEMINI_API_KEY=." .env && echo "  GEMINI_API_KEY: ✓"
+          grep -q "NOTION_TOKEN=." .env && echo "  NOTION_TOKEN: ✓"
+          grep -q "NOTION_DATABASE_ID=." .env && echo "  NOTION_DATABASE_ID: ✓"
+
+      # ── 运行采集管道 ──────────────────────────
+      - name: 运行采集管道
+        working-directory: scraper-data-2chibi
+        run: |
+          echo "🚀 开始每日采集..."
+          python3 run_pipeline.py 2>&1
+        env:
+          PYTHONUNBUFFERED: "1"
+
+      # ── 提交结果到仓库 ──────────────────────────
+      - name: 提交结果
+        working-directory: scraper-data-2chibi
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # 检查是否有变更
+          if git diff --quiet && git diff --staged --quiet; then
+            echo "✅ 没有新变更需要提交"
+            exit 0
+          fi
+          
+          # 添加 output 目录的变更
+          git add output/ index.html .github/
+          
+          # 提交
+          TODAY=$(date +%Y-%m-%d)
+          git commit -m "data: ${TODAY} 每日采集更新 [skip ci]
+          
+          自动提交每日采集结果
+          - 原始数据: output/${TODAY}.json
+          - 富化数据: output/${TODAY}_enriched.json
+          - 可视化页面: index.html
+          
+          [skip ci]"
+          
+          git push
+          echo "✅ 结果已提交到仓库"
+
+      # ── 上传产物（可选，保留 7 天） ──────────────
+      - name: 上传产物
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: daily-output-${{ github.run_number }}
+          path: scraper-data-2chibi/output/
+          retention-days: 7
