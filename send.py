@@ -59,8 +59,6 @@ def write_to_notion(items, date_str='2026-08-18'):
         }
         if link:
             props['链接'] = {'url': link}
-        if item.get('pic'):
-            props['pic'] = {'url': item.get('pic')}
 
         payload = json.dumps({
             'parent': {'database_id': DB_ID},
