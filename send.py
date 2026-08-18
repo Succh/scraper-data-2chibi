@@ -62,7 +62,8 @@ def write_to_notion(items, date_str='2026-08-18'):
 
         payload = json.dumps({
             'parent': {'database_id': DB_ID},
-            'properties': props
+            'properties': props,
+            'cover': {'type': 'external', 'external': {'url': item.get('pic', '')}} if item.get('pic') else None,
         }).encode()
 
         req = urllib.request.Request('https://api.notion.com/v1/pages', data=payload, headers=HEADERS)
