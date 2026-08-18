@@ -2,261 +2,760 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>二次元趣闻</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>二次元趣闻日报 · 2026-08-18</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#0f0f1a;color:#e0e0e0;min-height:100vh;padding:16px}
-.header{text-align:center;padding:24px 0 16px}
-.header h1{font-size:24px;background:linear-gradient(135deg,#ff6b6b,#ffa502,#70a1ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:800}
-.header .sub{font-size:13px;color:#888;margin-top:6px}
-.stats{display:flex;justify-content:center;gap:16px;margin-top:12px;font-size:13px;color:#aaa}
-.stats span{padding:4px 12px;background:#1a1a2e;border-radius:12px}
-.search-box{margin:12px 0 8px;display:flex;gap:8px}
-.search-box input{flex:1;padding:10px 14px;border-radius:10px;border:1px solid #2a2a4a;background:#1a1a2e;color:#e0e0e0;font-size:14px;outline:none}
-.search-box input:focus{border-color:#70a1ff}
-.filter-bar{display:flex;gap:8px;overflow-x:auto;padding:8px 0;margin-bottom:12px;-webkit-overflow-scrolling:touch}
-.filter-btn{padding:6px 14px;border-radius:16px;border:1px solid #2a2a4a;background:#1a1a2e;color:#aaa;font-size:13px;white-space:nowrap;cursor:pointer;transition:all .2s}
-.filter-btn.active,.filter-btn:hover{background:#70a1ff;color:#fff;border-color:#70a1ff}
-.card{background:#1a1a2e;border-radius:14px;padding:14px;margin-bottom:10px;border:1px solid #2a2a4a;transition:all .2s;animation:fadeIn .3s ease}
-.card:active{transform:scale(.98)}
-.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
-.score-badge{padding:4px 10px;border-radius:10px;font-weight:700;font-size:13px;color:#fff}
-.category-tag{font-size:12px;padding:3px 10px;border-radius:8px;color:#ccc}
-.card-title{font-size:15px;font-weight:600;line-height:1.4;margin-bottom:8px;color:#f0f0f0}
-.card-summary{font-size:13px;line-height:1.6;color:#bbb;margin-bottom:10px}
-.card-link{display:inline-block;font-size:13px;color:#70a1ff;text-decoration:none;padding:6px 12px;background:#70a1ff11;border-radius:8px;border:1px solid #70a1ff44;transition:all .2s}
-.card-link:active{background:#70a1ff33}
-.no-result{text-align:center;padding:40px;color:#666;font-size:14px}
-@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+  background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);
+  color:#e8e8f0;min-height:100vh;
+}
+
+/* ===== Hero Section ===== */
+.hero{
+  text-align:center;padding:60px 20px 40px;
+  background:radial-gradient(ellipse at top,rgba(231,76,60,0.15),transparent 70%);
+  border-bottom:1px solid rgba(255,255,255,0.05);
+}
+.hero h1{
+  font-size:2.4em;font-weight:800;
+  background:linear-gradient(135deg,#ff6b6b,#ffa07a,#ffd700,#98d8c8,#63b3ed,#b197fc);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+  margin-bottom:8px;
+}
+.hero .subtitle{color:#a0a0c0;font-size:1em;margin-bottom:20px}
+.hero-stats{display:flex;justify-content:center;gap:30px;flex-wrap:wrap}
+.hero-stat{
+  display:flex;flex-direction:column;align-items:center;
+  background:rgba(255,255,255,0.05);padding:12px 24px;border-radius:12px;
+  border:1px solid rgba(255,255,255,0.08);
+}
+.hero-stat .num{font-size:1.5em;font-weight:700;color:#ffd700}
+.hero-stat .label{font-size:0.75em;color:#888;margin-top:4px}
+
+/* ===== Controls ===== */
+.controls{
+  max-width:1200px;margin:0 auto;padding:20px 20px 0;
+  display:flex;flex-direction:column;gap:12px;align-items:center;
+}
+.search-box{
+  width:100%;max-width:500px;position:relative;
+}
+.search-box input{
+  width:100%;padding:12px 18px 12px 42px;
+  background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);
+  border-radius:25px;color:#fff;font-size:0.95em;outline:none;
+  transition:all .3s;
+}
+.search-box input:focus{border-color:#6366f1;box-shadow:0 0 20px rgba(99,102,241,0.2)}
+.search-box::before{
+  content:"🔍";position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:1.1em;
+}
+.cat-chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.cat-chip{
+  padding:6px 16px;border-radius:15px;border:2px solid;background:transparent;
+  font-size:0.82em;cursor:pointer;transition:all .2s;font-weight:600;
+}
+.cat-chip:hover,.cat-chip.active{opacity:1 !important}
+.cat-chip:not(.active){opacity:0.4}
+.cat-chip.active{background:rgba(255,255,255,0.1)}
+
+/* ===== Cards Grid ===== */
+.grid{
+  max-width:1200px;margin:20px auto;padding:20px;
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:20px;
+}
+
+/* ===== Card ===== */
+.card{
+  background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);
+  border-radius:16px;overflow:hidden;transition:all .3s;
+}
+.card:hover{
+  transform:translateY(-4px);border-color:rgba(99,102,241,0.3);
+  box-shadow:0 8px 32px rgba(0,0,0,0.3);
+}
+
+.card-header{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:12px 16px;background:rgba(0,0,0,0.15);
+}
+.tag{
+  padding:4px 12px;border-radius:10px;font-size:0.78em;font-weight:600;
+}
+.score-badge{
+  padding:4px 12px;border-radius:10px;font-size:0.85em;font-weight:700;color:#fff;
+  display:flex;align-items:center;gap:6px;
+}
+.score-label{font-size:0.75em;opacity:0.9}
+
+.card-main{
+  display:flex;gap:0;
+}
+.card-thumb{
+  width:120px;flex-shrink:0;overflow:hidden;
+}
+.card-thumb img{
+  width:100%;height:100%;object-fit:cover;display:block;
+}
+.card-content{
+  flex:1;padding:14px 16px;display:flex;flex-direction:column;gap:8px;min-width:0;
+}
+.card-title{
+  font-size:0.92em;font-weight:600;line-height:1.4;color:#f0f0ff;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+}
+.card-summary{
+  font-size:0.82em;color:#a0a0c0;line-height:1.5;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+}
+.card-meta{
+  font-size:0.8em;color:#7070a0;
+}
+.stats-bar{
+  display:flex;flex-wrap:wrap;gap:12px;padding-top:4px;
+  border-top:1px solid rgba(255,255,255,0.05);
+}
+.stat-item{
+  font-size:0.75em;color:#9090b0;display:flex;align-items:center;gap:2px;
+}
+.stat-icon{font-size:0.9em}
+.watch-link{
+  margin-top:2px;padding:6px 12px;background:rgba(103,58,183,0.15);
+  color:#a78bfa;text-decoration:none;border-radius:8px;font-size:0.8em;
+  text-align:center;transition:all .2s;
+}
+.watch-link:hover{background:rgba(103,58,183,0.3);color:#c4b5fd}
+
+.no-results{
+  text-align:center;padding:60px 20px;color:#666;grid-column:1/-1;
+}
+
+/* ===== Footer ===== */
+.footer{
+  text-align:center;padding:30px 20px;color:#555;font-size:0.75em;
+  border-top:1px solid rgba(255,255,255,0.05);
+}
+
+@media(max-width:500px){
+  .grid{grid-template-columns:1fr;gap:12px}
+  .hero h1{font-size:1.6em}
+  .hero-stats{gap:12px}
+  .card-main{flex-direction:column}
+  .card-thumb{width:100%;height:180px}
+  .stats-bar{gap:8px}
+}
 </style>
 </head>
 <body>
-<div class="header">
-    <h1>🎌 二次元趣闻</h1>
-    <p class="sub">B站采集 · AI评分 · 精选推荐</p>
-    <div class="stats">
-        <span>📊 共 20 条</span>
-        <span>📅 2026-08-18</span>
+
+<div class="hero">
+  <h1>🎮 二次元趣闻日报</h1>
+  <p class="subtitle">📅 2026-08-18 · 从B站挖掘今日最有趣的二次元内容</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><span class="num">20</span><span class="label">收录趣闻</span></div>
+    <div class="hero-stat"><span class="num">69.1</span><span class="label">平均评分</span></div>
+    <div class="hero-stat"><span class="num">新番</span><span class="label">热门分类</span></div>
+    <div class="hero-stat"><span class="num">📺</span><span class="label">数据来源 B站</span></div>
+  </div>
+</div>
+
+<div class="controls">
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="搜索趣闻标题、UP主、摘要...">
+  </div>
+  <div class="cat-chips" id="catChips">
+    <button class="cat-chip active" data-cat="ALL" style="border-color:#6366f1;color:#6366f1">📋 全部</button>
+    <button class="cat-chip active" data-cat="业界" style="border-color:#1abc9c;color:#1abc9c">业界</button><button class="cat-chip active" data-cat="动漫梗" style="border-color:#95a5a6;color:#95a5a6">动漫梗</button><button class="cat-chip active" data-cat="声优" style="border-color:#9b59b6;color:#9b59b6">声优</button><button class="cat-chip active" data-cat="新番" style="border-color:#95a5a6;color:#95a5a6">新番</button><button class="cat-chip active" data-cat="日本文化" style="border-color:#e74c3c;color:#e74c3c">日本文化</button><button class="cat-chip active" data-cat="游戏" style="border-color:#2ecc71;color:#2ecc71">游戏</button>
+  </div>
+</div>
+
+<div class="grid" id="cardsGrid">
+  
+    <div class="card" data-cat="日本文化">
+      <div class="card-header">
+        <span class="tag" style="background:#e74c3c;color:#fff">日本文化</span>
+        <div class="score-badge" style="background:#e74c3c">
+          85 <span class="score-label">🔥 爆款</span>
+        </div>
+      </div>
+      <div class="card-main">
+        <div class="card-thumb"><img src="http://i1.hdslb.com/bfs/archive/830c14d8e59d30c718e491a14f3e2bc9a3d48268.jpg" alt="" loading="lazy"/></div>
+        <div class="card-content">
+          <h3 class="card-title">卡哇伊从入门到泛滥，欲望被妖魔化，6000多万日本女人变成“少女傀儡”，这才是日本的“核武器”</h3>
+          <p class="card-summary">深度揭秘日系“可爱文化”背后的社会枷锁，原来kawaii也能“杀人”？🎀</p>
+          <div class="card-meta">
+            <span class="author">📺 金花顺子</span>
+          </div>
+          <div class="stats-bar">
+            <span class="stat-item"><span class="stat-icon">▶️</span>166.2万 播放</span>
+            <span class="stat-item"><span class="stat-icon">💬</span>2280 弹幕</span>
+            <span class="stat-item"><span class="stat-icon">❤️</span>6.0万 点赞</span>
+            <span class="stat-item"><span class="stat-icon">🪙</span>7353 投币</span>
+            <span class="stat-item"><span class="stat-icon">⏱️</span>06:12</span>
+          </div>
+          <a href="https://www.bilibili.com/video/BV1yw411Y7ai" target="_blank" rel="noopener" class="watch-link">🔗 前往 B站观看 →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" data-cat="业界">
+      <div class="card-header">
+        <span class="tag" style="background:#1abc9c;color:#fff">业界</span>
+        <div class="score-badge" style="background:#e74c3c">
+          82 <span class="score-label">🔥 爆款</span>
+        </div>
+      </div>
+      <div class="card-main">
+        <div class="card-thumb"><img src="http://i0.hdslb.com/bfs/archive/2f690e35e394ff69d91031e1f420e8de27ab6cb7.jpg" alt="" loading="lazy"/></div>
+        <div class="card-content">
+          <h3 class="card-title">这些漫画家的迷惑趣闻</h3>
+          <p class="card-summary">漫画家们的离谱日常，这些大脑洞作者的现实生活比作品还离谱！✍️</p>
+          <div class="card-meta">
+            <span class="author">📺 奶瓶x天下</span>
+          </div>
+          <div class="stats-bar">
+            <span class="stat-item"><span class="stat-icon">▶️</span>86.9万 播放</span>
+            <span class="stat-item"><span class="stat-icon">💬</span>147 弹幕</span>
+            <span class="stat-item"><span class="stat-icon">❤️</span>1.7万 点赞</span>
+            <span class="stat-item"><span class="stat-icon">🪙</span>877 投币</span>
+            <span class="stat-item"><span class="stat-icon">⏱️</span>04:06</span>
+          </div>
+          <a href="https://www.bilibili.com/video/BV1kyFeznEh7" target="_blank" rel="noopener" class="watch-link">🔗 前往 B站观看 →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" data-cat="游戏">
+      <div class="card-header">
+        <span class="tag" style="background:#2ecc71;color:#fff">游戏</span>
+        <div class="score-badge" style="background:#f39c12">
+          78 <span class="score-label">⭐ 优质</span>
+        </div>
+      </div>
+      <div class="card-main">
+        <div class="card-thumb"><img src="http://i0.hdslb.com/bfs/archive/6cd0df792dbd094aa295d12eb3c9c895ba7d71b3.jpg" alt="" loading="lazy"/></div>
+        <div class="card-content">
+          <h3 class="card-title">14个干员趣闻冷知识！内含每页抽象小剧场【干员逸闻录】</h3>
+          <p class="card-summary">方舟干员冷知识大合集，原来这些角色还有这么抽象的一面！🎭</p>
+          <div class="card-meta">
+            <span class="author">📺 十二鸢鸢子</span>
+          </div>
+          <div class="stats-bar">
+            <span class="stat-item"><span class="stat-icon">▶️</span>53.5万 播放</span>
+            <span class="stat-item"><span class="stat-icon">💬</span>746 弹幕</span>
+            <span class="stat-item"><span class="stat-icon">❤️</span>5.7万 点赞</span>
+            <span class="stat-item"><span class="stat-icon">🪙</span>3282 投币</span>
+            <span class="stat-item"><span class="stat-icon">⏱️</span>05:24</span>
+          </div>
+          <a href="https://www.bilibili.com/video/BV138HLzeEFz" target="_blank" rel="noopener" class="watch-link">🔗 前往 B站观看 →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" data-cat="游戏">
+      <div class="card-header">
+        <span class="tag" style="background:#2ecc71;color:#fff">游戏</span>
+        <div class="score-badge" style="background:#f39c12">
+          75 <span class="score-label">⭐ 优质</span>
+        </div>
+      </div>
+      <div class="card-main">
+        <div class="card-thumb"><img src="http://i1.hdslb.com/bfs/archive/cfe08867d7183fc27fd4db78f379c7ef649a0f91.jpg" alt="" loading="lazy"/></div>
+        <div class="card-content">
+          <h3 class="card-title">【游戏梗百科】原神的椅子可以坐，是什么梗？</h3>
+          <p class="card-summary">原神里“椅子能坐”也是梗？带你回顾开服初期的那些单纯快乐！🪑</p>
+          <div class="card-meta">
+            <span class="author">📺 游戏梗百科</span>
+          </div>
+          <div class="stats-bar">
+            <span class="stat-item"><span class="stat-icon">▶️</span>44.0万 播放</span>
+            <span class="stat-item"><span class="stat-icon">💬</span>456 弹幕</span>
+            <span class="stat-item"><span class="stat-icon">❤️</span>6574 点赞</span>
+            <span class="stat-item"><span class="stat-icon">🪙</span>133 投币</span>
+            <span class="stat-item"><span class="stat-icon">⏱️</span>01:34</span>
+          </div>
+          <a href="https://www.bilibili.com/video/BV13Y4y1u7e5" target="_blank" rel="noopener" class="watch-link">🔗 前往 B站观看 →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" data-cat="游戏">
+      <div class="card-header">
+        <span class="tag" style="background:#2ecc71;color:#fff">游戏</span>
+        <div class="score-badge" style="background:#f39c12">
+          76 <span class="score-label">⭐ 优质</span>
+        </div>
+      </div>
+      <div class="card-main">
+        <div class="card-thumb"><img src="http://i2.hdslb.com/bfs/archive/aeadee458bd218993d887a9a1127988aaf039054.jpg" alt="" loading="lazy"/></div>
+        <div class="card-content">
+          <h3 class="card-title">14个干员趣闻冷知识！内含每页抽象小剧场【干员逸闻录】</h3>
+          <p class="card-summary">又是14个干员的小秘密，明日方舟玩家必看的抽象小剧场！🧪</p>
+          <div class="card-meta">
+            <span class="author">📺 十二鸢鸢子</span>
+          </div>
+          <div class="stats-bar">
+            <span class="stat-item"><span class="stat-icon">▶️</span>42.1万 播放</span>
+            <span class="stat-item"><span class="stat-icon">💬</span>800 弹幕</span>
+            <span class="stat-item"><span class="stat-icon">❤️</span>4.5万 点赞</span>
+            <span class="stat-item"><span class="stat-icon">🪙</span>3452 投币</span>
+            <span class="stat-item"><span class="stat-icon">⏱️</span>04:38</span>
+          </div>
+          <a href="https://www.bilibili.com/video/BV1Fx7kz7EQa" target="_blank" rel="noopener" class="watch-link">🔗 前往 B站观看 →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" data-cat="游戏">
+      <div class="card-header">
+        <span class="tag" style="background:#2ecc71;color:#fff">游戏</span>
+        <div class="score-badge" style="background:#f39c12">
+          79 <span class="score-label">⭐ 优质</span>
+        </div>
+      </div>
+      <div class="card-main">
+        <div class="card-thumb"><img src="http://i2.hdslb.com/bfs/archive/90373bf5fbf077a76136844428a016d225db61cb.jpg" alt="" loading="lazy"/></div>
+        <div class="card-content">
+          <h3 class="card-title">17个干员趣闻冷知识！内含每页抽象小剧场【干员逸闻录】</h3>
+          <p class="card-summary">干员趣闻再加量！17个冷知识带你认识不一样的罗德岛干员~📦</p>
+          <div class="card-meta">
+            <span class="author">📺 十二鸢鸢子</span>
+          </div>
+          <div class="stats-bar">
+            <span class="stat-item"><span class="stat-icon">▶️</span>35.9万 播放</span>
+            <span class="stat-item"><span class="stat-icon">💬</span>544 弹幕</span>
+            <span class="stat-item"><span class="stat-icon">❤️</span>3.6万 点赞</span>
+            <span class="stat-item"><span class="stat-icon">🪙</span>4691 投币</span>
+            <span class="stat-item"><span class="stat-icon">⏱️</span>04:26</span>
+          </div>
+          <a href="https://www.bilibili.com/video/BV1ndJqzuE1n" target="_blank" rel="noopener" class="watch-link">🔗 前往 B站观看 →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" data-cat="日本文化">
+      <div class="card-header">
+        <span class="tag" style="background:#e74c3c;color:#fff">日本文化</span>
+        <div class="score-badge" style="background:#e74c3c">
+          88 <span class="score-label">🔥 爆款</span>
+        </div>
+      </div>
+      <div class="card-main">
+        <div class="card-thumb"><img src="http://i1.hdslb.com/bfs/archive/647a8c19ca4843c1116677a4ec641f149f347c73.jpg" alt="" loading="lazy"/></div>
+        <div class="card-content">
+          <h3 class="card-title">一边被骂变态，一边惨遭霸凌，刻板印象从何而来？</h3>
+          <p class="card-summary">为宅男正名！深度剖析二次元被刻板印象妖魔化的辛酸史。💢</p>
+          <div class="card-meta">
+            <span class="author">📺 金花顺子</span>
+          </div>
+          <div class="stats-bar">
+            <span class="stat-item"><span class="stat-icon">▶️</span>25.7万 播放</span>
+            <span class="stat-item"><span class="stat-icon">💬</span>959 弹幕</span>
+            <span class="stat-item"><span class="stat-icon">❤️</span>1.1万 点赞</span>
+            <span class="stat-item"><span class="stat-icon">🪙</span>1129 投币</span>
+            <span class="stat-item"><span class="stat-icon">⏱️</span>08:13</span>
+          </div>
+          <a href="https://www.bilibili.com/video/BV16z4y1V7jJ" target="_blank" rel="noopener" class="watch-link">🔗 前往 B站观看 →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" data-cat="动漫梗">
+      <div class="card-header">
+        <span class="tag" style="background:#95a5a6;color:#fff">动漫梗</span>
+        <div class="score-badge" style="background:#e74c3c">
+          80 <span class="score-label">🔥 爆款</span>
+        </div>
+      </div>
+      <div class="card-main">
+        
+        <div class="card-content">
+          <h3 class="card-title">美少女变身后居然成了高达？！这就是二次元吗？i了i了！【趣闻解答01】</h3>
+          <p class="card-summary">谁说美少女只能变魔法少女？变身成高达才是硬核猛男该看的！🤖</p>
+          <div class="card-meta">
+            <span class="author">📺 </span>
+          </div>
+          <div class="stats-bar">
+            <span class="stat-item"><span class="stat-icon">▶️</span>0 播放</span>
+            <span class="stat-item"><span class="stat-icon">💬</span>0 弹幕</span>
+            <span class="stat-item"><span class="stat-icon">❤️</span>0 点赞</span>
+            <span class="stat-item"><span class="stat-icon">🪙</span>0 投币</span>
+            
+          </div>
+          <a href="https://www.bilibili.com/video/BV1Lf4y1172n" target="_blank" rel="noopener" class="watch-link">🔗 前往 B站观看 →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" data-cat="游戏">
+      <div class="card-header">
+        <span class="tag" style="background:#2ecc71;color:#fff">游戏</span>
+        <div class="score-badge" style="background:#f39c12">
+          73 <span class="score-label">⭐ 优质</span>
+        </div>
+      </div>
+      <div class="card-main">
+        <div class="card-thumb"><img src="http://i0.hdslb.com/bfs/archive/412bd24ff0b215353b458407d2506b91c72adcc2.jpg" alt="" loading="lazy"/></div>
+        <div class="card-content">
+          <h3 class="card-title">原神趣闻—神之眼的离谱获得方式 #原神 #流风眷堇庭</h3>
+          <p class="card-summary">吐槽原神角色拿神之眼的离谱姿势，提瓦特的神发货真的很随意！👁️</p>
+          <div class="card-meta">
+            <span class="author">📺 账号已注销</span>
+          </div>
+          <div class="stats-bar">
+            <span class="stat-item"><span class="stat-icon">▶️</span>21.7万 播放</span>
+            <span class="stat-item"><span class="stat-icon">💬</span>73 弹幕</span>
+            <span class="stat-item"><span class="stat-icon">❤️</span>7356 点赞</span>
+            <span class="stat-item"><span class="stat-icon">🪙</span>38 投币</span>
+            <span class="stat-item"><span class="stat-icon">⏱️</span>01:16</span>
+          </div>
+          <a href="https://www.bilibili.com/video/BV1Qb411972H" target="_blank" rel="noopener" class="watch-link">🔗 前往 B站观看 →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" data-cat="声优">
+      <div class="card-header">
+        <span class="tag" style="background:#9b59b6;color:#fff">声优</span>
+        <div class="score-badge" style="background:#e74c3c">
+          92 <span class="score-label">🔥 爆款</span>
+        </div>
+      </div>
+      <div class="card-main">
+        <div class="card-thumb"><img src="http://i0.hdslb.com/bfs/archive/5d0023099bdd1aa4ad9263ee685f62fabcb51c63.jpg" alt="" loading="lazy"/></div>
+        <div class="card-content">
+          <h3 class="card-title">【萌新迷惑】声优因为胸部造假丢了工作？？？那些匪夷所思的二次元迷惑趣闻</h3>
+          <p class="card-summary">震惊！声优竟因胸部造假被开除？这些业界趣闻也太炸裂了！🎙️</p>
+          <div class="card-meta">
+            <span class="author">📺 萌新二次方</span>
+          </div>
+          <div class="stats-bar">
+            <span class="stat-item"><span class="stat-icon">▶️</span>20.5万 播放</span>
+            <span class="stat-item"><span class="stat-icon">💬</span>407 弹幕</span>
+            <span class="stat-item"><span class="stat-icon">❤️</span>1.9万 点赞</span>
+            <span class="stat-item"><span class="stat-icon">🪙</span>5385 投币</span>
+            <span class="stat-item"><span class="stat-icon">⏱️</span>07:03</span>
+          </div>
+          <a href="https://www.bilibili.com/video/BV1pK411K7kV" target="_blank" rel="noopener" class="watch-link">🔗 前往 B站观看 →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" data-cat="业界">
+      <div class="card-header">
+        <span class="tag" style="background:#1abc9c;color:#fff">业界</span>
+        <div class="score-badge" style="background:#f39c12">
+          70 <span class="score-label">⭐ 优质</span>
+        </div>
+      </div>
+      <div class="card-main">
+        <div class="card-thumb"><img src="http://i1.hdslb.com/bfs/archive/e54c827c177fd5c630ac258ca1042db254fc4955.jpg" alt="" loading="lazy"/></div>
+        <div class="card-content">
+          <h3 class="card-title">前方高能！第一名震撼我妈！十大最欢迎日本动画公司 封神之作【硬核排行】</h3>
+          <p class="card-summary">盘点日本十大神仙级动画公司，快来看看你的“老婆”是谁画的？🏢</p>
+          <div class="card-meta">
+            <span class="author">📺 摇曳百合吧</span>
+          </div>
+          <div class="stats-bar">
+            <span class="stat-item"><span class="stat-icon">▶️</span>1905.0万 播放</span>
+            <span class="stat-item"><span class="stat-icon">💬</span>23.3万 弹幕</span>
+            <span class="stat-item"><span class="stat-icon">❤️</span>46.5万 点赞</span>
+            <span class="stat-item"><span class="stat-icon">🪙</span>36.9万 投币</span>
+            <span class="stat-item"><span class="stat-icon">⏱️</span>23:59</span>
+          </div>
+          <a href="https://www.bilibili.com/video/BV1P441197oV" target="_blank" rel="noopener" class="watch-link">🔗 前往 B站观看 →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" data-cat="新番">
+      <div class="card-header">
+        <span class="tag" style="background:#95a5a6;color:#fff">新番</span>
+        <div class="score-badge" style="background:#f39c12">
+          65 <span class="score-label">⭐ 优质</span>
+        </div>
+      </div>
+      <div class="card-main">
+        <div class="card-thumb"><img src="http://i0.hdslb.com/bfs/archive/a5f7978492f5cc635e4c81b3b62a69d4fc59742a.jpg" alt="" loading="lazy"/></div>
+        <div class="card-content">
+          <h3 class="card-title">史上最刺激人性动画，白富美玩爆整个村子？剧情震撼三观！【高能吐槽】</h3>
+          <p class="card-summary">揭秘人性黑暗面的高能动画，剧情反转到让你怀疑人生！⚠️</p>
+          <div class="card-meta">
+            <span class="author">📺 鲁过一世</span>
+          </div>
+          <div class="stats-bar">
+            <span class="stat-item"><span class="stat-icon">▶️</span>621.0万 播放</span>
+            <span class="stat-item"><span class="stat-icon">💬</span>2.3万 弹幕</span>
+            <span class="stat-item"><span class="stat-icon">❤️</span>23.1万 点赞</span>
+            <span class="stat-item"><span class="stat-icon">🪙</span>13.8万 投币</span>
+            <span class="stat-item"><span class="stat-icon">⏱️</span>16:26</span>
+          </div>
+          <a href="https://www.bilibili.com/video/BV1vE411t7Pq" target="_blank" rel="noopener" class="watch-link">🔗 前往 B站观看 →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" data-cat="新番">
+      <div class="card-header">
+        <span class="tag" style="background:#95a5a6;color:#fff">新番</span>
+        <div class="score-badge" style="background:#f39c12">
+          60 <span class="score-label">⭐ 优质</span>
+        </div>
+      </div>
+      <div class="card-main">
+        <div class="card-thumb"><img src="http://i1.hdslb.com/bfs/archive/b8460eeb7d9ca0f9be447421aa2128c89f2ecf4b.jpg" alt="" loading="lazy"/></div>
+        <div class="card-content">
+          <h3 class="card-title">动漫推荐：狮头，猿脸，虎躯，鹰爪，蛇尾 一个融合了多种动物形态的鬼神</h3>
+          <p class="card-summary">融合了五种动物姿态的鬼神怪谈，这种奇异画风你爱了吗？🐲</p>
+          <div class="card-meta">
+            <span class="author">📺 北澜动漫</span>
+          </div>
+          <div class="stats-bar">
+            <span class="stat-item"><span class="stat-icon">▶️</span>594.0万 播放</span>
+            <span class="stat-item"><span class="stat-icon">💬</span>133 弹幕</span>
+            <span class="stat-item"><span class="stat-icon">❤️</span>6.3万 点赞</span>
+            <span class="stat-item"><span class="stat-icon">🪙</span>1011 投币</span>
+            <span class="stat-item"><span class="stat-icon">⏱️</span>02:07</span>
+          </div>
+          <a href="https://www.bilibili.com/video/BV1DR4y1J7qs" target="_blank" rel="noopener" class="watch-link">🔗 前往 B站观看 →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" data-cat="新番">
+      <div class="card-header">
+        <span class="tag" style="background:#95a5a6;color:#fff">新番</span>
+        <div class="score-badge" style="background:#3498db">
+          55 <span class="score-label">💡 一般</span>
+        </div>
+      </div>
+      <div class="card-main">
+        <div class="card-thumb"><img src="http://i1.hdslb.com/bfs/archive/78d1f02a82328730b42860842691b813714dfe2c.jpg" alt="" loading="lazy"/></div>
+        <div class="card-content">
+          <h3 class="card-title">第一集就求男主调戏她，还直接扑倒你怀里！</h3>
+          <p class="card-summary">开局就扑倒？这就是老司机们最爱的福利向名场面合集吧！😏</p>
+          <div class="card-meta">
+            <span class="author">📺 py86啊</span>
+          </div>
+          <div class="stats-bar">
+            <span class="stat-item"><span class="stat-icon">▶️</span>572.5万 播放</span>
+            <span class="stat-item"><span class="stat-icon">💬</span>3189 弹幕</span>
+            <span class="stat-item"><span class="stat-icon">❤️</span>8.0万 点赞</span>
+            <span class="stat-item"><span class="stat-icon">🪙</span>1.4万 投币</span>
+            <span class="stat-item"><span class="stat-icon">⏱️</span>03:24</span>
+          </div>
+          <a href="https://www.bilibili.com/video/BV1AJ41127jd" target="_blank" rel="noopener" class="watch-link">🔗 前往 B站观看 →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" data-cat="新番">
+      <div class="card-header">
+        <span class="tag" style="background:#95a5a6;color:#fff">新番</span>
+        <div class="score-badge" style="background:#3498db">
+          58 <span class="score-label">💡 一般</span>
+        </div>
+      </div>
+      <div class="card-main">
+        <div class="card-thumb"><img src="http://i2.hdslb.com/bfs/archive/8ccd013db42a5eb077ba5c65b2c49b98522503c9.jpg" alt="" loading="lazy"/></div>
+        <div class="card-content">
+          <h3 class="card-title">史上最刺激新番！剧情全程高能车速超快，看完后震惊了！</h3>
+          <p class="card-summary">车速过快请系好安全带！带你领略那些挑战审核底线的高能番。🏎️</p>
+          <div class="card-meta">
+            <span class="author">📺 我是M菌</span>
+          </div>
+          <div class="stats-bar">
+            <span class="stat-item"><span class="stat-icon">▶️</span>555.0万 播放</span>
+            <span class="stat-item"><span class="stat-icon">💬</span>2.0万 弹幕</span>
+            <span class="stat-item"><span class="stat-icon">❤️</span>26.1万 点赞</span>
+            <span class="stat-item"><span class="stat-icon">🪙</span>13.9万 投币</span>
+            <span class="stat-item"><span class="stat-icon">⏱️</span>07:10</span>
+          </div>
+          <a href="https://www.bilibili.com/video/BV1mf4y1S7mT" target="_blank" rel="noopener" class="watch-link">🔗 前往 B站观看 →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" data-cat="动漫梗">
+      <div class="card-header">
+        <span class="tag" style="background:#95a5a6;color:#fff">动漫梗</span>
+        <div class="score-badge" style="background:#f39c12">
+          74 <span class="score-label">⭐ 优质</span>
+        </div>
+      </div>
+      <div class="card-main">
+        <div class="card-thumb"><img src="http://i1.hdslb.com/bfs/archive/bccba8d63701c337a7c3091eae11cd4f0e7cdeca.png" alt="" loading="lazy"/></div>
+        <div class="card-content">
+          <h3 class="card-title">前方高能。新番万恶之源之拍屁股</h3>
+          <p class="card-summary">万恶之源！盘点那些在二次元圈疯狂流传的“拍屁股”名场面。🍑</p>
+          <div class="card-meta">
+            <span class="author">📺 月影从不咕</span>
+          </div>
+          <div class="stats-bar">
+            <span class="stat-item"><span class="stat-icon">▶️</span>538.7万 播放</span>
+            <span class="stat-item"><span class="stat-icon">💬</span>2048 弹幕</span>
+            <span class="stat-item"><span class="stat-icon">❤️</span>2.2万 点赞</span>
+            <span class="stat-item"><span class="stat-icon">🪙</span>2070 投币</span>
+            <span class="stat-item"><span class="stat-icon">⏱️</span>02:44</span>
+          </div>
+          <a href="https://www.bilibili.com/video/BV1Lt41157KG" target="_blank" rel="noopener" class="watch-link">🔗 前往 B站观看 →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" data-cat="新番">
+      <div class="card-header">
+        <span class="tag" style="background:#95a5a6;color:#fff">新番</span>
+        <div class="score-badge" style="background:#3498db">
+          40 <span class="score-label">💡 一般</span>
+        </div>
+      </div>
+      <div class="card-main">
+        <div class="card-thumb"><img src="http://i1.hdslb.com/bfs/archive/00043f4d112904165d0b0802fd1e81707ca74d12.jpg" alt="" loading="lazy"/></div>
+        <div class="card-content">
+          <h3 class="card-title">炮姐归来！阵容炸裂！2020年1月新番导视！</h3>
+          <p class="card-summary">爷青回！2020年1月新番怀旧导视，炮姐归来带头冲锋！⚡</p>
+          <div class="card-meta">
+            <span class="author">📺 LexBurner</span>
+          </div>
+          <div class="stats-bar">
+            <span class="stat-item"><span class="stat-icon">▶️</span>522.0万 播放</span>
+            <span class="stat-item"><span class="stat-icon">💬</span>4.5万 弹幕</span>
+            <span class="stat-item"><span class="stat-icon">❤️</span>35.2万 点赞</span>
+            <span class="stat-item"><span class="stat-icon">🪙</span>27.2万 投币</span>
+            <span class="stat-item"><span class="stat-icon">⏱️</span>12:13</span>
+          </div>
+          <a href="https://www.bilibili.com/video/BV1AJ411b7TF" target="_blank" rel="noopener" class="watch-link">🔗 前往 B站观看 →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" data-cat="新番">
+      <div class="card-header">
+        <span class="tag" style="background:#95a5a6;color:#fff">新番</span>
+        <div class="score-badge" style="background:#3498db">
+          45 <span class="score-label">💡 一般</span>
+        </div>
+      </div>
+      <div class="card-main">
+        <div class="card-thumb"><img src="http://i1.hdslb.com/bfs/archive/d65bdb03618ad63e067f7ca139a14cdb2020b316.jpg" alt="" loading="lazy"/></div>
+        <div class="card-content">
+          <h3 class="card-title">看完7月新番，我直接扭成双螺旋！【泛式】</h3>
+          <p class="card-summary">跟着泛式看新番，带你领略那种“扭成双螺旋”的追番快乐！🌀</p>
+          <div class="card-meta">
+            <span class="author">📺 泛式</span>
+          </div>
+          <div class="stats-bar">
+            <span class="stat-item"><span class="stat-icon">▶️</span>504.0万 播放</span>
+            <span class="stat-item"><span class="stat-icon">💬</span>4.2万 弹幕</span>
+            <span class="stat-item"><span class="stat-icon">❤️</span>46.4万 点赞</span>
+            <span class="stat-item"><span class="stat-icon">🪙</span>21.8万 投币</span>
+            <span class="stat-item"><span class="stat-icon">⏱️</span>12:06</span>
+          </div>
+          <a href="https://www.bilibili.com/video/BV1JB4y1C7ZB" target="_blank" rel="noopener" class="watch-link">🔗 前往 B站观看 →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" data-cat="新番">
+      <div class="card-header">
+        <span class="tag" style="background:#95a5a6;color:#fff">新番</span>
+        <div class="score-badge" style="background:#3498db">
+          45 <span class="score-label">💡 一般</span>
+        </div>
+      </div>
+      <div class="card-main">
+        <div class="card-thumb"><img src="http://i2.hdslb.com/bfs/archive/2b03034c1cb4e30afbc2e27469a614c31203aff2.jpg" alt="" loading="lazy"/></div>
+        <div class="card-content">
+          <h3 class="card-title">奶爆新番！四月最值得期待的10部动画！搞不好真要史上最强了(?)【泛式】</h3>
+          <p class="card-summary">回顾当年的“史上最强”4月新番，看看最后谁封神谁拉胯了？🥛</p>
+          <div class="card-meta">
+            <span class="author">📺 泛式</span>
+          </div>
+          <div class="stats-bar">
+            <span class="stat-item"><span class="stat-icon">▶️</span>481.8万 播放</span>
+            <span class="stat-item"><span class="stat-icon">💬</span>1.5万 弹幕</span>
+            <span class="stat-item"><span class="stat-icon">❤️</span>23.5万 点赞</span>
+            <span class="stat-item"><span class="stat-icon">🪙</span>6.8万 投币</span>
+            <span class="stat-item"><span class="stat-icon">⏱️</span>10:45</span>
+          </div>
+          <a href="https://www.bilibili.com/video/BV1cu411B73f" target="_blank" rel="noopener" class="watch-link">🔗 前往 B站观看 →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" data-cat="新番">
+      <div class="card-header">
+        <span class="tag" style="background:#95a5a6;color:#fff">新番</span>
+        <div class="score-badge" style="background:#f39c12">
+          62 <span class="score-label">⭐ 优质</span>
+        </div>
+      </div>
+      <div class="card-main">
+        <div class="card-thumb"><img src="http://i1.hdslb.com/bfs/archive/4105dffbd55764a484118c1d8d659cc6cacd6309.jpg" alt="" loading="lazy"/></div>
+        <div class="card-content">
+          <h3 class="card-title">这部国漫为何被封神？被无数人吹爆？未开播就拿下了惊人战绩！【国漫槽推荐 05】</h3>
+          <p class="card-summary">国漫之光预定！还没开播就拿捏全场的动画到底有什么魔力？✨</p>
+          <div class="card-meta">
+            <span class="author">📺 奇思Cheers</span>
+          </div>
+          <div class="stats-bar">
+            <span class="stat-item"><span class="stat-icon">▶️</span>463.5万 播放</span>
+            <span class="stat-item"><span class="stat-icon">💬</span>6799 弹幕</span>
+            <span class="stat-item"><span class="stat-icon">❤️</span>5.3万 点赞</span>
+            <span class="stat-item"><span class="stat-icon">🪙</span>2.3万 投币</span>
+            <span class="stat-item"><span class="stat-icon">⏱️</span>09:24</span>
+          </div>
+          <a href="https://www.bilibili.com/video/BV1Zb411H7sr" target="_blank" rel="noopener" class="watch-link">🔗 前往 B站观看 →</a>
+        </div>
+      </div>
     </div>
 </div>
 
-<div class="search-box">
-    <input type="text" id="search" placeholder="🔍 搜索标题或内容..." oninput="filterCards()">
+<div class="footer">
+  <p>⚡ 自动采集 · AI富化 · Notion同步 · 本页面由 scraper-data-2chibi 自动生成</p>
 </div>
-
-<div class="filter-bar">
-    <button class="filter-btn active" onclick="filterBy('全部')">全部</button>
-    <button class="filter-btn" onclick="filterBy(\"业界\")">业界</button><button class="filter-btn" onclick="filterBy(\"动漫梗\")">动漫梗</button><button class="filter-btn" onclick="filterBy(\"声优\")">声优</button><button class="filter-btn" onclick="filterBy(\"新番\")">新番</button><button class="filter-btn" onclick="filterBy(\"日本文化\")">日本文化</button><button class="filter-btn" onclick="filterBy(\"游戏\")">游戏</button>
-</div>
-
-<div class="cards" id="cards">
-    <div class="card" data-category="声优" data-score="92">
-        <div class="card-header">
-            <span class="score-badge" style="background:#ff4757">92</span>
-            <span class="category-tag" style="background:#a29bfe22;border:1px solid #a29bfe66">声优</span>
-        </div>
-        <h3 class="card-title">🔥 【萌新迷惑】声优因为胸部造假丢了工作？？？那些匪夷所思的二次元迷惑趣闻</h3>
-        <p class="card-summary">震惊！声优竟因胸部造假被开除？这些业界趣闻也太炸裂了！🎙️</p>
-        <a class="card-link" href="https://www.bilibili.com/video/BV1pK411K7kV" target="_blank">📺 去B站看视频 →</a>
-    </div>
-    <div class="card" data-category="日本文化" data-score="88">
-        <div class="card-header">
-            <span class="score-badge" style="background:#ff4757">88</span>
-            <span class="category-tag" style="background:#70a1ff22;border:1px solid #70a1ff66">日本文化</span>
-        </div>
-        <h3 class="card-title">🔥 一边被骂变态，一边惨遭霸凌，刻板印象从何而来？</h3>
-        <p class="card-summary">为宅男正名！深度剖析二次元被刻板印象妖魔化的辛酸史。💢</p>
-        <a class="card-link" href="https://www.bilibili.com/video/BV16z4y1V7jJ" target="_blank">📺 去B站看视频 →</a>
-    </div>
-    <div class="card" data-category="日本文化" data-score="85">
-        <div class="card-header">
-            <span class="score-badge" style="background:#ff4757">85</span>
-            <span class="category-tag" style="background:#70a1ff22;border:1px solid #70a1ff66">日本文化</span>
-        </div>
-        <h3 class="card-title">🔥 卡哇伊从入门到泛滥，欲望被妖魔化，6000多万日本女人变成“少女傀儡”，这才是日本的“核武器”</h3>
-        <p class="card-summary">深度揭秘日系“可爱文化”背后的社会枷锁，原来kawaii也能“杀人”？🎀</p>
-        <a class="card-link" href="https://www.bilibili.com/video/BV1yw411Y7ai" target="_blank">📺 去B站看视频 →</a>
-    </div>
-    <div class="card" data-category="业界" data-score="82">
-        <div class="card-header">
-            <span class="score-badge" style="background:#ff4757">82</span>
-            <span class="category-tag" style="background:#dfe6e922;border:1px solid #dfe6e966">业界</span>
-        </div>
-        <h3 class="card-title">🔥 这些漫画家的迷惑趣闻</h3>
-        <p class="card-summary">漫画家们的离谱日常，这些大脑洞作者的现实生活比作品还离谱！✍️</p>
-        <a class="card-link" href="https://www.bilibili.com/video/BV1kyFeznEh7" target="_blank">📺 去B站看视频 →</a>
-    </div>
-    <div class="card" data-category="动漫梗" data-score="80">
-        <div class="card-header">
-            <span class="score-badge" style="background:#ff4757">80</span>
-            <span class="category-tag" style="background:#dfe6e922;border:1px solid #dfe6e966">动漫梗</span>
-        </div>
-        <h3 class="card-title">🔥 美少女变身后居然成了高达？！这就是二次元吗？i了i了！【趣闻解答01】</h3>
-        <p class="card-summary">谁说美少女只能变魔法少女？变身成高达才是硬核猛男该看的！🤖</p>
-        <a class="card-link" href="https://www.bilibili.com/video/BV1Lf4y1172n" target="_blank">📺 去B站看视频 →</a>
-    </div>
-    <div class="card" data-category="游戏" data-score="79">
-        <div class="card-header">
-            <span class="score-badge" style="background:#ffa502">79</span>
-            <span class="category-tag" style="background:#7bed9f22;border:1px solid #7bed9f66">游戏</span>
-        </div>
-        <h3 class="card-title">⚡ 17个干员趣闻冷知识！内含每页抽象小剧场【干员逸闻录】</h3>
-        <p class="card-summary">干员趣闻再加量！17个冷知识带你认识不一样的罗德岛干员~📦</p>
-        <a class="card-link" href="https://www.bilibili.com/video/BV1ndJqzuE1n" target="_blank">📺 去B站看视频 →</a>
-    </div>
-    <div class="card" data-category="游戏" data-score="78">
-        <div class="card-header">
-            <span class="score-badge" style="background:#ffa502">78</span>
-            <span class="category-tag" style="background:#7bed9f22;border:1px solid #7bed9f66">游戏</span>
-        </div>
-        <h3 class="card-title">⚡ 14个干员趣闻冷知识！内含每页抽象小剧场【干员逸闻录】</h3>
-        <p class="card-summary">方舟干员冷知识大合集，原来这些角色还有这么抽象的一面！🎭</p>
-        <a class="card-link" href="https://www.bilibili.com/video/BV138HLzeEFz" target="_blank">📺 去B站看视频 →</a>
-    </div>
-    <div class="card" data-category="游戏" data-score="76">
-        <div class="card-header">
-            <span class="score-badge" style="background:#ffa502">76</span>
-            <span class="category-tag" style="background:#7bed9f22;border:1px solid #7bed9f66">游戏</span>
-        </div>
-        <h3 class="card-title">⚡ 14个干员趣闻冷知识！内含每页抽象小剧场【干员逸闻录】</h3>
-        <p class="card-summary">又是14个干员的小秘密，明日方舟玩家必看的抽象小剧场！🧪</p>
-        <a class="card-link" href="https://www.bilibili.com/video/BV1Fx7kz7EQa" target="_blank">📺 去B站看视频 →</a>
-    </div>
-    <div class="card" data-category="游戏" data-score="75">
-        <div class="card-header">
-            <span class="score-badge" style="background:#ffa502">75</span>
-            <span class="category-tag" style="background:#7bed9f22;border:1px solid #7bed9f66">游戏</span>
-        </div>
-        <h3 class="card-title">⚡ 【游戏梗百科】原神的椅子可以坐，是什么梗？</h3>
-        <p class="card-summary">原神里“椅子能坐”也是梗？带你回顾开服初期的那些单纯快乐！🪑</p>
-        <a class="card-link" href="https://www.bilibili.com/video/BV13Y4y1u7e5" target="_blank">📺 去B站看视频 →</a>
-    </div>
-    <div class="card" data-category="动漫梗" data-score="74">
-        <div class="card-header">
-            <span class="score-badge" style="background:#ffa502">74</span>
-            <span class="category-tag" style="background:#dfe6e922;border:1px solid #dfe6e966">动漫梗</span>
-        </div>
-        <h3 class="card-title">⚡ 前方高能。新番万恶之源之拍屁股</h3>
-        <p class="card-summary">万恶之源！盘点那些在二次元圈疯狂流传的“拍屁股”名场面。🍑</p>
-        <a class="card-link" href="https://www.bilibili.com/video/BV1Lt41157KG" target="_blank">📺 去B站看视频 →</a>
-    </div>
-    <div class="card" data-category="游戏" data-score="73">
-        <div class="card-header">
-            <span class="score-badge" style="background:#ffa502">73</span>
-            <span class="category-tag" style="background:#7bed9f22;border:1px solid #7bed9f66">游戏</span>
-        </div>
-        <h3 class="card-title">⚡ 原神趣闻—神之眼的离谱获得方式 #原神 #流风眷堇庭</h3>
-        <p class="card-summary">吐槽原神角色拿神之眼的离谱姿势，提瓦特的神发货真的很随意！👁️</p>
-        <a class="card-link" href="https://www.bilibili.com/video/BV1Qb411972H" target="_blank">📺 去B站看视频 →</a>
-    </div>
-    <div class="card" data-category="业界" data-score="70">
-        <div class="card-header">
-            <span class="score-badge" style="background:#ffa502">70</span>
-            <span class="category-tag" style="background:#dfe6e922;border:1px solid #dfe6e966">业界</span>
-        </div>
-        <h3 class="card-title">⚡ 前方高能！第一名震撼我妈！十大最欢迎日本动画公司 封神之作【硬核排行】</h3>
-        <p class="card-summary">盘点日本十大神仙级动画公司，快来看看你的“老婆”是谁画的？🏢</p>
-        <a class="card-link" href="https://www.bilibili.com/video/BV1P441197oV" target="_blank">📺 去B站看视频 →</a>
-    </div>
-    <div class="card" data-category="新番" data-score="65">
-        <div class="card-header">
-            <span class="score-badge" style="background:#ffa502">65</span>
-            <span class="category-tag" style="background:#dfe6e922;border:1px solid #dfe6e966">新番</span>
-        </div>
-        <h3 class="card-title">⚡ 史上最刺激人性动画，白富美玩爆整个村子？剧情震撼三观！【高能吐槽】</h3>
-        <p class="card-summary">揭秘人性黑暗面的高能动画，剧情反转到让你怀疑人生！⚠️</p>
-        <a class="card-link" href="https://www.bilibili.com/video/BV1vE411t7Pq" target="_blank">📺 去B站看视频 →</a>
-    </div>
-    <div class="card" data-category="新番" data-score="62">
-        <div class="card-header">
-            <span class="score-badge" style="background:#ffa502">62</span>
-            <span class="category-tag" style="background:#dfe6e922;border:1px solid #dfe6e966">新番</span>
-        </div>
-        <h3 class="card-title">⚡ 这部国漫为何被封神？被无数人吹爆？未开播就拿下了惊人战绩！【国漫槽推荐 05】</h3>
-        <p class="card-summary">国漫之光预定！还没开播就拿捏全场的动画到底有什么魔力？✨</p>
-        <a class="card-link" href="https://www.bilibili.com/video/BV1Zb411H7sr" target="_blank">📺 去B站看视频 →</a>
-    </div>
-    <div class="card" data-category="新番" data-score="60">
-        <div class="card-header">
-            <span class="score-badge" style="background:#ffa502">60</span>
-            <span class="category-tag" style="background:#dfe6e922;border:1px solid #dfe6e966">新番</span>
-        </div>
-        <h3 class="card-title">⚡ 动漫推荐：狮头，猿脸，虎躯，鹰爪，蛇尾 一个融合了多种动物形态的鬼神</h3>
-        <p class="card-summary">融合了五种动物姿态的鬼神怪谈，这种奇异画风你爱了吗？🐲</p>
-        <a class="card-link" href="https://www.bilibili.com/video/BV1DR4y1J7qs" target="_blank">📺 去B站看视频 →</a>
-    </div>
-    <div class="card" data-category="新番" data-score="58">
-        <div class="card-header">
-            <span class="score-badge" style="background:#70a1ff">58</span>
-            <span class="category-tag" style="background:#dfe6e922;border:1px solid #dfe6e966">新番</span>
-        </div>
-        <h3 class="card-title">💡 史上最刺激新番！剧情全程高能车速超快，看完后震惊了！</h3>
-        <p class="card-summary">车速过快请系好安全带！带你领略那些挑战审核底线的高能番。🏎️</p>
-        <a class="card-link" href="https://www.bilibili.com/video/BV1mf4y1S7mT" target="_blank">📺 去B站看视频 →</a>
-    </div>
-    <div class="card" data-category="新番" data-score="55">
-        <div class="card-header">
-            <span class="score-badge" style="background:#70a1ff">55</span>
-            <span class="category-tag" style="background:#dfe6e922;border:1px solid #dfe6e966">新番</span>
-        </div>
-        <h3 class="card-title">💡 第一集就求男主调戏她，还直接扑倒你怀里！</h3>
-        <p class="card-summary">开局就扑倒？这就是老司机们最爱的福利向名场面合集吧！😏</p>
-        <a class="card-link" href="https://www.bilibili.com/video/BV1AJ41127jd" target="_blank">📺 去B站看视频 →</a>
-    </div>
-    <div class="card" data-category="新番" data-score="45">
-        <div class="card-header">
-            <span class="score-badge" style="background:#70a1ff">45</span>
-            <span class="category-tag" style="background:#dfe6e922;border:1px solid #dfe6e966">新番</span>
-        </div>
-        <h3 class="card-title">💡 看完7月新番，我直接扭成双螺旋！【泛式】</h3>
-        <p class="card-summary">跟着泛式看新番，带你领略那种“扭成双螺旋”的追番快乐！🌀</p>
-        <a class="card-link" href="https://www.bilibili.com/video/BV1JB4y1C7ZB" target="_blank">📺 去B站看视频 →</a>
-    </div>
-    <div class="card" data-category="新番" data-score="45">
-        <div class="card-header">
-            <span class="score-badge" style="background:#70a1ff">45</span>
-            <span class="category-tag" style="background:#dfe6e922;border:1px solid #dfe6e966">新番</span>
-        </div>
-        <h3 class="card-title">💡 奶爆新番！四月最值得期待的10部动画！搞不好真要史上最强了(?)【泛式】</h3>
-        <p class="card-summary">回顾当年的“史上最强”4月新番，看看最后谁封神谁拉胯了？🥛</p>
-        <a class="card-link" href="https://www.bilibili.com/video/BV1cu411B73f" target="_blank">📺 去B站看视频 →</a>
-    </div>
-    <div class="card" data-category="新番" data-score="40">
-        <div class="card-header">
-            <span class="score-badge" style="background:#70a1ff">40</span>
-            <span class="category-tag" style="background:#dfe6e922;border:1px solid #dfe6e966">新番</span>
-        </div>
-        <h3 class="card-title">💡 炮姐归来！阵容炸裂！2020年1月新番导视！</h3>
-        <p class="card-summary">爷青回！2020年1月新番怀旧导视，炮姐归来带头冲锋！⚡</p>
-        <a class="card-link" href="https://www.bilibili.com/video/BV1AJ411b7TF" target="_blank">📺 去B站看视频 →</a>
-    </div></div>
-
-<div class="no-result" id="no-result" style="display:none">😅 没有找到匹配的内容</div>
 
 <script>
-let currentCategory = '全部';
-function filterBy(cat){
-    currentCategory = cat;
-    document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
-    event.target.classList.add('active');
-    filterCards();
+const grid = document.getElementById('cardsGrid');
+const searchInput = document.getElementById('searchInput');
+const chips = document.querySelectorAll('.cat-chip');
+
+function applyFilters() {
+  const query = searchInput.value.toLowerCase().trim();
+  const activeCat = [...chips].find(c => c.classList.contains('active'))?.dataset.cat || 'ALL';
+  const cards = grid.querySelectorAll('.card');
+  let visible = 0;
+
+  cards.forEach(card => {
+    const cat = card.dataset.cat;
+    const text = card.textContent.toLowerCase();
+    const matchSearch = !query || text.includes(query);
+    const matchCat = activeCat === 'ALL' || cat === activeCat;
+    const show = matchSearch && matchCat;
+    card.style.display = show ? '' : 'none';
+    if (show) visible++;
+  });
+
+  // Remove old no-results and add if needed
+  const existing = grid.querySelector('.no-results');
+  if (existing) existing.remove();
+  if (visible === 0) {
+    grid.innerHTML += '<div class="no-results">😅 没有找到匹配的趣闻，换个关键词试试？</div>';
+  }
 }
-function filterCards(){
-    const query = document.getElementById('search').value.toLowerCase();
-    const cards = document.querySelectorAll('.card');
-    let visible = 0;
-    cards.forEach(card=>{
-        const title = card.querySelector('.card-title').textContent.toLowerCase();
-        const summary = card.querySelector('.card-summary').textContent.toLowerCase();
-        const cat = card.dataset.category;
-        const matchCat = currentCategory==='全部' || cat===currentCategory;
-        const matchQuery = !query || title.includes(query) || summary.includes(query);
-        if(matchCat && matchQuery){card.style.display='';visible++}
-        else{card.style.display='none'}
-    });
-    document.getElementById('no-result').style.display = visible===0 ? 'block' : 'none';
-}
+
+searchInput.addEventListener('input', applyFilters);
+chips.forEach(chip => {
+  chip.addEventListener('click', () => {
+    chips.forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    applyFilters();
+  });
+});
 </script>
 </body>
 </html>
