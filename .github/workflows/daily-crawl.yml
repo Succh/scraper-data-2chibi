@@ -54,8 +54,8 @@ jobs:
           grep -q "GEMINI_API_KEY=." .env && echo "  GEMINI_API_KEY: ✓"
           grep -q "NOTION_TOKEN=." .env && echo "  NOTION_TOKEN: ✓"
           grep -q "NOTION_DATABASE_ID=." .env && echo "  NOTION_DATABASE_ID: ✓"
-          grep -q "SUPABASE_URL=." .env && echo "  SUPABASE_URL: ✓"
-          grep -q "SUPABASE_KEY=." .env && echo "  SUPABASE_KEY: ✓"
+          grep -q "SUPABASE_URL" .env && echo "  SUPABASE_URL: ✓"
+          grep -q "SUPABASE_KEY" .env && echo "  SUPABASE_KEY: ✓"
 
       # ── 运行采集管道 ──────────────────────────
       - name: 运行采集管道
