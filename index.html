@@ -129,6 +129,33 @@ body{
 }
 .watch-link:hover{background:rgba(103,58,183,0.3);color:#c4b5fd}
 
+
+/* ===== 反馈按钮 ===== */
+.card-footer{
+  display:flex;justify-content:flex-end;align-items:center;gap:8px;
+  padding-top:8px;border-top:1px solid rgba(255,255,255,0.05);margin-top:8px;
+}
+.fb-btn{
+  display:inline-flex;align-items:center;gap:4px;
+  padding:4px 12px;border-radius:15px;border:1px solid rgba(255,255,255,0.15);
+  background:rgba(255,255,255,0.05);color:#c0c0d0;font-size:0.78em;
+  cursor:pointer;transition:all .2s;user-select:none;
+}
+.fb-btn:hover{background:rgba(255,255,255,0.12)}
+.fb-btn.active-like{background:rgba(231,76,60,0.25);border-color:#e74c3c;color:#e74c3c}
+.fb-btn.active-dislike{background:rgba(100,100,140,0.3);border-color:#666;color:#999}
+.export-bar{
+  max-width:1200px;margin:0 auto 20px;padding:0 20px;
+  display:flex;justify-content:flex-end;
+}
+.export-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:8px 18px;border-radius:20px;border:1px solid rgba(99,102,241,0.4);
+  background:rgba(99,102,241,0.1);color:#a5b4fc;font-size:0.85em;
+  cursor:pointer;transition:all .2s;
+}
+.export-btn:hover{background:rgba(99,102,241,0.25)}
+
 .no-results{
   text-align:center;padding:60px 20px;color:#666;grid-column:1/-1;
 }
@@ -197,7 +224,10 @@ body{
             <span class="stat-item"><span class="stat-icon">⏱️</span>06:12</span>
           </div>
           <a href="https://www.bilibili.com/video/BV1yw411Y7ai" target="_blank" rel="noopener" class="watch-link">🔗 前往 B站观看 →</a>
-        </div>
+          <div class="card-footer">
+            <button class="fb-btn" data-bvid="BV1yw411Y7ai" data-action="like" onclick="toggleFeedback(this)">🤍 喜欢</button>
+            <button class="fb-btn" data-bvid="BV1yw411Y7ai" data-action="dislike" onclick="toggleFeedback(this)">💔 不感兴趣</button>
+          </div></div>
       </div>
     </div>
 
@@ -224,7 +254,10 @@ body{
             <span class="stat-item"><span class="stat-icon">⏱️</span>04:06</span>
           </div>
           <a href="https://www.bilibili.com/video/BV1kyFeznEh7" target="_blank" rel="noopener" class="watch-link">🔗 前往 B站观看 →</a>
-        </div>
+          <div class="card-footer">
+            <button class="fb-btn" data-bvid="BV1kyFeznEh7" data-action="like" onclick="toggleFeedback(this)">🤍 喜欢</button>
+            <button class="fb-btn" data-bvid="BV1kyFeznEh7" data-action="dislike" onclick="toggleFeedback(this)">💔 不感兴趣</button>
+          </div></div>
       </div>
     </div>
 
@@ -251,7 +284,10 @@ body{
             <span class="stat-item"><span class="stat-icon">⏱️</span>05:24</span>
           </div>
           <a href="https://www.bilibili.com/video/BV138HLzeEFz" target="_blank" rel="noopener" class="watch-link">🔗 前往 B站观看 →</a>
-        </div>
+          <div class="card-footer">
+            <button class="fb-btn" data-bvid="BV138HLzeEFz" data-action="like" onclick="toggleFeedback(this)">🤍 喜欢</button>
+            <button class="fb-btn" data-bvid="BV138HLzeEFz" data-action="dislike" onclick="toggleFeedback(this)">💔 不感兴趣</button>
+          </div></div>
       </div>
     </div>
 
@@ -278,7 +314,10 @@ body{
             <span class="stat-item"><span class="stat-icon">⏱️</span>01:34</span>
           </div>
           <a href="https://www.bilibili.com/video/BV13Y4y1u7e5" target="_blank" rel="noopener" class="watch-link">🔗 前往 B站观看 →</a>
-        </div>
+          <div class="card-footer">
+            <button class="fb-btn" data-bvid="BV13Y4y1u7e5" data-action="like" onclick="toggleFeedback(this)">🤍 喜欢</button>
+            <button class="fb-btn" data-bvid="BV13Y4y1u7e5" data-action="dislike" onclick="toggleFeedback(this)">💔 不感兴趣</button>
+          </div></div>
       </div>
     </div>
 
@@ -305,7 +344,10 @@ body{
             <span class="stat-item"><span class="stat-icon">⏱️</span>04:38</span>
           </div>
           <a href="https://www.bilibili.com/video/BV1Fx7kz7EQa" target="_blank" rel="noopener" class="watch-link">🔗 前往 B站观看 →</a>
-        </div>
+          <div class="card-footer">
+            <button class="fb-btn" data-bvid="BV1Fx7kz7EQa" data-action="like" onclick="toggleFeedback(this)">🤍 喜欢</button>
+            <button class="fb-btn" data-bvid="BV1Fx7kz7EQa" data-action="dislike" onclick="toggleFeedback(this)">💔 不感兴趣</button>
+          </div></div>
       </div>
     </div>
 
@@ -332,7 +374,10 @@ body{
             <span class="stat-item"><span class="stat-icon">⏱️</span>04:26</span>
           </div>
           <a href="https://www.bilibili.com/video/BV1ndJqzuE1n" target="_blank" rel="noopener" class="watch-link">🔗 前往 B站观看 →</a>
-        </div>
+          <div class="card-footer">
+            <button class="fb-btn" data-bvid="BV1ndJqzuE1n" data-action="like" onclick="toggleFeedback(this)">🤍 喜欢</button>
+            <button class="fb-btn" data-bvid="BV1ndJqzuE1n" data-action="dislike" onclick="toggleFeedback(this)">💔 不感兴趣</button>
+          </div></div>
       </div>
     </div>
 
@@ -359,7 +404,10 @@ body{
             <span class="stat-item"><span class="stat-icon">⏱️</span>08:13</span>
           </div>
           <a href="https://www.bilibili.com/video/BV16z4y1V7jJ" target="_blank" rel="noopener" class="watch-link">🔗 前往 B站观看 →</a>
-        </div>
+          <div class="card-footer">
+            <button class="fb-btn" data-bvid="BV16z4y1V7jJ" data-action="like" onclick="toggleFeedback(this)">🤍 喜欢</button>
+            <button class="fb-btn" data-bvid="BV16z4y1V7jJ" data-action="dislike" onclick="toggleFeedback(this)">💔 不感兴趣</button>
+          </div></div>
       </div>
     </div>
 
@@ -386,7 +434,10 @@ body{
             
           </div>
           <a href="https://www.bilibili.com/video/BV1Lf4y1172n" target="_blank" rel="noopener" class="watch-link">🔗 前往 B站观看 →</a>
-        </div>
+          <div class="card-footer">
+            <button class="fb-btn" data-bvid="BV1Lf4y1172n" data-action="like" onclick="toggleFeedback(this)">🤍 喜欢</button>
+            <button class="fb-btn" data-bvid="BV1Lf4y1172n" data-action="dislike" onclick="toggleFeedback(this)">💔 不感兴趣</button>
+          </div></div>
       </div>
     </div>
 
@@ -413,7 +464,10 @@ body{
             <span class="stat-item"><span class="stat-icon">⏱️</span>01:16</span>
           </div>
           <a href="https://www.bilibili.com/video/BV1Qb411972H" target="_blank" rel="noopener" class="watch-link">🔗 前往 B站观看 →</a>
-        </div>
+          <div class="card-footer">
+            <button class="fb-btn" data-bvid="BV1Qb411972H" data-action="like" onclick="toggleFeedback(this)">🤍 喜欢</button>
+            <button class="fb-btn" data-bvid="BV1Qb411972H" data-action="dislike" onclick="toggleFeedback(this)">💔 不感兴趣</button>
+          </div></div>
       </div>
     </div>
 
@@ -440,7 +494,10 @@ body{
             <span class="stat-item"><span class="stat-icon">⏱️</span>07:03</span>
           </div>
           <a href="https://www.bilibili.com/video/BV1pK411K7kV" target="_blank" rel="noopener" class="watch-link">🔗 前往 B站观看 →</a>
-        </div>
+          <div class="card-footer">
+            <button class="fb-btn" data-bvid="BV1pK411K7kV" data-action="like" onclick="toggleFeedback(this)">🤍 喜欢</button>
+            <button class="fb-btn" data-bvid="BV1pK411K7kV" data-action="dislike" onclick="toggleFeedback(this)">💔 不感兴趣</button>
+          </div></div>
       </div>
     </div>
 
@@ -467,7 +524,10 @@ body{
             <span class="stat-item"><span class="stat-icon">⏱️</span>23:59</span>
           </div>
           <a href="https://www.bilibili.com/video/BV1P441197oV" target="_blank" rel="noopener" class="watch-link">🔗 前往 B站观看 →</a>
-        </div>
+          <div class="card-footer">
+            <button class="fb-btn" data-bvid="BV1P441197oV" data-action="like" onclick="toggleFeedback(this)">🤍 喜欢</button>
+            <button class="fb-btn" data-bvid="BV1P441197oV" data-action="dislike" onclick="toggleFeedback(this)">💔 不感兴趣</button>
+          </div></div>
       </div>
     </div>
 
@@ -494,7 +554,10 @@ body{
             <span class="stat-item"><span class="stat-icon">⏱️</span>16:26</span>
           </div>
           <a href="https://www.bilibili.com/video/BV1vE411t7Pq" target="_blank" rel="noopener" class="watch-link">🔗 前往 B站观看 →</a>
-        </div>
+          <div class="card-footer">
+            <button class="fb-btn" data-bvid="BV1vE411t7Pq" data-action="like" onclick="toggleFeedback(this)">🤍 喜欢</button>
+            <button class="fb-btn" data-bvid="BV1vE411t7Pq" data-action="dislike" onclick="toggleFeedback(this)">💔 不感兴趣</button>
+          </div></div>
       </div>
     </div>
 
@@ -521,7 +584,10 @@ body{
             <span class="stat-item"><span class="stat-icon">⏱️</span>02:07</span>
           </div>
           <a href="https://www.bilibili.com/video/BV1DR4y1J7qs" target="_blank" rel="noopener" class="watch-link">🔗 前往 B站观看 →</a>
-        </div>
+          <div class="card-footer">
+            <button class="fb-btn" data-bvid="BV1DR4y1J7qs" data-action="like" onclick="toggleFeedback(this)">🤍 喜欢</button>
+            <button class="fb-btn" data-bvid="BV1DR4y1J7qs" data-action="dislike" onclick="toggleFeedback(this)">💔 不感兴趣</button>
+          </div></div>
       </div>
     </div>
 
@@ -548,7 +614,10 @@ body{
             <span class="stat-item"><span class="stat-icon">⏱️</span>03:24</span>
           </div>
           <a href="https://www.bilibili.com/video/BV1AJ41127jd" target="_blank" rel="noopener" class="watch-link">🔗 前往 B站观看 →</a>
-        </div>
+          <div class="card-footer">
+            <button class="fb-btn" data-bvid="BV1AJ41127jd" data-action="like" onclick="toggleFeedback(this)">🤍 喜欢</button>
+            <button class="fb-btn" data-bvid="BV1AJ41127jd" data-action="dislike" onclick="toggleFeedback(this)">💔 不感兴趣</button>
+          </div></div>
       </div>
     </div>
 
@@ -575,7 +644,10 @@ body{
             <span class="stat-item"><span class="stat-icon">⏱️</span>07:10</span>
           </div>
           <a href="https://www.bilibili.com/video/BV1mf4y1S7mT" target="_blank" rel="noopener" class="watch-link">🔗 前往 B站观看 →</a>
-        </div>
+          <div class="card-footer">
+            <button class="fb-btn" data-bvid="BV1mf4y1S7mT" data-action="like" onclick="toggleFeedback(this)">🤍 喜欢</button>
+            <button class="fb-btn" data-bvid="BV1mf4y1S7mT" data-action="dislike" onclick="toggleFeedback(this)">💔 不感兴趣</button>
+          </div></div>
       </div>
     </div>
 
@@ -602,7 +674,10 @@ body{
             <span class="stat-item"><span class="stat-icon">⏱️</span>02:44</span>
           </div>
           <a href="https://www.bilibili.com/video/BV1Lt41157KG" target="_blank" rel="noopener" class="watch-link">🔗 前往 B站观看 →</a>
-        </div>
+          <div class="card-footer">
+            <button class="fb-btn" data-bvid="BV1Lt41157KG" data-action="like" onclick="toggleFeedback(this)">🤍 喜欢</button>
+            <button class="fb-btn" data-bvid="BV1Lt41157KG" data-action="dislike" onclick="toggleFeedback(this)">💔 不感兴趣</button>
+          </div></div>
       </div>
     </div>
 
@@ -629,7 +704,10 @@ body{
             <span class="stat-item"><span class="stat-icon">⏱️</span>12:13</span>
           </div>
           <a href="https://www.bilibili.com/video/BV1AJ411b7TF" target="_blank" rel="noopener" class="watch-link">🔗 前往 B站观看 →</a>
-        </div>
+          <div class="card-footer">
+            <button class="fb-btn" data-bvid="BV1AJ411b7TF" data-action="like" onclick="toggleFeedback(this)">🤍 喜欢</button>
+            <button class="fb-btn" data-bvid="BV1AJ411b7TF" data-action="dislike" onclick="toggleFeedback(this)">💔 不感兴趣</button>
+          </div></div>
       </div>
     </div>
 
@@ -656,7 +734,10 @@ body{
             <span class="stat-item"><span class="stat-icon">⏱️</span>12:06</span>
           </div>
           <a href="https://www.bilibili.com/video/BV1JB4y1C7ZB" target="_blank" rel="noopener" class="watch-link">🔗 前往 B站观看 →</a>
-        </div>
+          <div class="card-footer">
+            <button class="fb-btn" data-bvid="BV1JB4y1C7ZB" data-action="like" onclick="toggleFeedback(this)">🤍 喜欢</button>
+            <button class="fb-btn" data-bvid="BV1JB4y1C7ZB" data-action="dislike" onclick="toggleFeedback(this)">💔 不感兴趣</button>
+          </div></div>
       </div>
     </div>
 
@@ -683,7 +764,10 @@ body{
             <span class="stat-item"><span class="stat-icon">⏱️</span>10:45</span>
           </div>
           <a href="https://www.bilibili.com/video/BV1cu411B73f" target="_blank" rel="noopener" class="watch-link">🔗 前往 B站观看 →</a>
-        </div>
+          <div class="card-footer">
+            <button class="fb-btn" data-bvid="BV1cu411B73f" data-action="like" onclick="toggleFeedback(this)">🤍 喜欢</button>
+            <button class="fb-btn" data-bvid="BV1cu411B73f" data-action="dislike" onclick="toggleFeedback(this)">💔 不感兴趣</button>
+          </div></div>
       </div>
     </div>
 
@@ -710,9 +794,16 @@ body{
             <span class="stat-item"><span class="stat-icon">⏱️</span>09:24</span>
           </div>
           <a href="https://www.bilibili.com/video/BV1Zb411H7sr" target="_blank" rel="noopener" class="watch-link">🔗 前往 B站观看 →</a>
-        </div>
+          <div class="card-footer">
+            <button class="fb-btn" data-bvid="BV1Zb411H7sr" data-action="like" onclick="toggleFeedback(this)">🤍 喜欢</button>
+            <button class="fb-btn" data-bvid="BV1Zb411H7sr" data-action="dislike" onclick="toggleFeedback(this)">💔 不感兴趣</button>
+          </div></div>
       </div>
     </div>
+</div>
+
+<div class="export-bar">
+  <button class="export-btn" onclick="exportFeedback()">📤 导出反馈数据 (feedback.json)</button>
 </div>
 
 <div class="footer">
@@ -756,6 +847,65 @@ chips.forEach(chip => {
     applyFilters();
   });
 });
+
+// ===== 反馈系统 =====
+const FEEDBACK_KEY = '2chibi_feedback';
+
+function loadFeedback() {
+  try { return JSON.parse(localStorage.getItem(FEEDBACK_KEY) || '[]'); }
+  catch { return []; }
+}
+
+function saveFeedback(fb) {
+  localStorage.setItem(FEEDBACK_KEY, JSON.stringify(fb));
+}
+
+function toggleFeedback(btn) {
+  const bvid = btn.dataset.bvid;
+  const action = btn.dataset.action;
+  const card = btn.closest('.card');
+  const siblings = card.querySelectorAll('.fb-btn');
+
+  let fb = loadFeedback();
+
+  if (btn.classList.contains('active-like') || btn.classList.contains('active-dislike')) {
+    // 取消当前选中
+    btn.classList.remove('active-like', 'active-dislike');
+    fb = fb.filter(e => !(e.bvid === bvid && e.action === action));
+    saveFeedback(fb);
+  } else {
+    // 清除同卡片另一个按钮
+    siblings.forEach(s => s.classList.remove('active-like', 'active-dislike'));
+    btn.classList.add(action === 'like' ? 'active-like' : 'active-dislike');
+
+    // 替换该BVID的旧反馈
+    fb = fb.filter(e => e.bvid !== bvid);
+    fb.push({ bvid, action, timestamp: new Date().toISOString() });
+    saveFeedback(fb);
+  }
+}
+
+function exportFeedback() {
+  const fb = loadFeedback();
+  if (fb.length === 0) { alert('还没有反馈数据哦，先去点🤍或💔吧~'); return; }
+  const blob = new Blob([JSON.stringify(fb, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'feedback.json'; a.click();
+  URL.revokeObjectURL(url);
+}
+
+// 页面加载时恢复按钮状态
+(function restoreFeedback() {
+  const fb = loadFeedback();
+  fb.forEach(entry => {
+    const btn = document.querySelector(`.fb-btn[data-bvid="${entry.bvid}"][data-action="${entry.action}"]`);
+    if (btn) {
+      btn.classList.add(entry.action === 'like' ? 'active-like' : 'active-dislike');
+    }
+  });
+})();
+
 </script>
 </body>
 </html>

@@ -137,6 +137,62 @@ def dedup_report():
 
 
 # ═══════════════════════════════════════════════
+def show_feedback_stats():
+    """显示反馈统计信息"""
+    feedback_path = OUTPUT_DIR / "feedback.json"
+    if not feedback_path.exists():
+        return
+    
+    try:
+        feedbacks = json.loads(feedback_path.read_text())
+    except (json.JSONDecodeError, IOError):
+        return
+    
+    if not feedbacks:
+        return
+    
+    # 读取富化数据建立 bvid -> category 映射
+    enriched_path = OUTPUT_DIR / f"{today_str()}_enriched.json"
+    bvid_to_cat = {}
+    if enriched_path.exists():
+        try:
+            prev_data = json.loads(enriched_path.read_text())
+            for item in prev_data:
+                bvid_to_cat[item.get("bvid", "")] = item.get("category", "其他")
+        except (json.JSONDecodeError, IOError):
+            pass
+    
+    # 按分类统计
+    cat_stats = {}
+    for fb in feedbacks:
+        bvid = fb.get("bvid", "")
+        action = fb.get("action", "")
+        cat = bvid_to_cat.get(bvid, "其他")
+        if cat not in cat_stats:
+            cat_stats[cat] = {"like": 0, "dislike": 0}
+        if action == "like":
+            cat_stats[cat]["like"] += 1
+        elif action == "dislike":
+            cat_stats[cat]["dislike"] += 1
+    
+    total = len(feedbacks)
+    likes = sum(s["like"] for s in cat_stats.values())
+    dislikes = sum(s["dislike"] for s in cat_stats.values())
+    print(f"\n📊 用户反馈统计（{total} 条）: 👍{likes} 👎{dislikes}")
+    for cat, stats in sorted(cat_stats.items(), key=lambda x: -(x[1]["like"] + x[1]["dislike"])):
+        cat_total = stats["like"] + stats["dislike"]
+        if cat_total == 0:
+            continue
+        like_ratio = stats["like"] / cat_total
+        if like_ratio >= 0.7 and stats["like"] >= 2:
+            tag = "⬆️ 偏好"
+        elif like_ratio <= 0.3 and stats["dislike"] >= 2:
+            tag = "⬇️ 避雷"
+        else:
+            tag = "➡️ 中性"
+        print(f"   {cat:8s} {stats['like']}👍{stats['dislike']}👎 {tag}")
+
+
 # 主调度
 # ═══════════════════════════════════════════════
 
@@ -182,6 +238,9 @@ def main():
     print(f"  🎬 二次元趣闻采集管道 - 完整运行")
     print(f"  📅 {today_str()}")
     print(f"{'━'*50}")
+
+    # 显示反馈统计（如果存在）
+    show_feedback_stats()
 
     # Step 1: 采集
     print(f"\n📡 [1/4] B站数据采集...")
