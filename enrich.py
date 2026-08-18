@@ -121,6 +121,20 @@ def build_feedback_hint(weights):
     return "\n".join(hints)
 
 def main():
+    # 读取今天的采集数据
+    today = datetime.now().strftime("%Y-%m-%d")
+    input_file = OUTPUT_DIR / f"{today}.json"
+    if not input_file.exists():
+        print(f"❌ 采集文件不存在: {input_file}")
+        print("请先运行 scrape.py 采集数据")
+        return
+    with open(input_file, "r", encoding="utf-8") as f:
+        items = json.load(f)
+    if not items:
+        print("❌ 采集数据为空")
+        return
+    print(f"📂 已加载 {len(items)} 条采集数据")
+
     # 读取反馈权重
     weights = load_feedback_weights()
     feedback_hint = build_feedback_hint(weights)
