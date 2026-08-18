@@ -46,6 +46,7 @@ jobs:
           GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}
           NOTION_TOKEN=${{ secrets.NOTION_TOKEN }}
           NOTION_DATABASE_ID=${{ secrets.NOTION_DATABASE_ID }}
+          BILI_COOKIE=${{ secrets.BILI_COOKIE }}
           SUPABASE_URL=${{ secrets.SUPABASE_URL }}
           SUPABASE_KEY=${{ secrets.SUPABASE_KEY }}
           EOF
@@ -54,6 +55,7 @@ jobs:
           grep -q "GEMINI_API_KEY=." .env && echo "  GEMINI_API_KEY: ✓"
           grep -q "NOTION_TOKEN=." .env && echo "  NOTION_TOKEN: ✓"
           grep -q "NOTION_DATABASE_ID=." .env && echo "  NOTION_DATABASE_ID: ✓"
+          grep -q "BILI_COOKIE" .env && echo "  BILI_COOKIE: ✓"
           grep -q "SUPABASE_URL" .env && echo "  SUPABASE_URL: ✓"
           grep -q "SUPABASE_KEY" .env && echo "  SUPABASE_KEY: ✓"
 

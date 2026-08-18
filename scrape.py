@@ -140,6 +140,12 @@ HEADERS = {
     "Referer": "https://www.bilibili.com",
 }
 
+# 从环境变量加载 B 站 Cookie（可选，用于反爬）
+_BILI_COOKIE = _ENV.get("BILI_COOKIE", "")
+if _BILI_COOKIE:
+    HEADERS["Cookie"] = _BILI_COOKIE
+    print("✅ 已加载 B 站 Cookie")
+
 ssl_ctx = ssl.create_default_context()
 ssl_ctx.check_hostname = False
 ssl_ctx.verify_mode = ssl.CERT_NONE
