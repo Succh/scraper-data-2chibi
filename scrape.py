@@ -44,6 +44,96 @@ KEYWORDS = [
     "cosplay 整活", "动漫 梗", "Vtuber 搞笑",
 ]
 
+# 分类 → 关键词映射（用于根据反馈调整搜索策略）
+CAT_KEYWORDS = {
+    "日本文化": ["日本文化", "日系社会", "日本趣事"],
+    "声优": ["声优", "配音演员", "声优趣事"],
+    "游戏": ["原神", "明日方舟", "游戏梗", "游戏趣闻"],
+    "动漫梗": ["动漫梗", "二次元梗", "名场面"],
+    "新番": ["新番", "动画推荐", "追番"],
+    "业界": ["动漫业界", "动画公司", "业界新闻"],
+    "Cosplay": ["cosplay", "漫展", "二次元穿搭"],
+    "Vtuber": ["Vtuber", "虚拟主播", "vtuber搞笑"],
+    "综合": ["二次元", "动漫", "acg"],
+}
+
+
+def load_feedback_adjusted_keywords():
+    """
+    读取 feedback.json，根据用户偏好调整关键词权重。
+    返回调整后的关键词列表（更多偏好的词，减少不喜欢的词）。
+    """
+    feedback_path = OUTPUT_DIR / "feedback.json"
+    if not feedback_path.exists():
+        return KEYWORDS
+    
+    try:
+        with open(feedback_path, "r", encoding="utf-8") as f:
+            feedbacks = json.load(f)
+    except (json.JSONDecodeError, IOError):
+        return KEYWORDS
+    
+    if not feedbacks:
+        return KEYWORDS
+    
+    # 读取已有富化数据建立 bvid -> category 映射
+    from datetime import datetime as dt
+    today = dt.now().strftime("%Y-%m-%d")
+    enriched_path = OUTPUT_DIR / f"{today}_enriched.json"
+    bvid_to_cat = {}
+    if enriched_path.exists():
+        try:
+            with open(enriched_path, "r", encoding="utf-8") as f:
+                prev_data = json.load(f)
+            for item in prev_data:
+                bvid_to_cat[item.get("bvid", "")] = item.get("category", "其他")
+        except (json.JSONDecodeError, IOError):
+            pass
+    
+    # 按分类统计 like/dislike
+    cat_stats = {}
+    for fb in feedbacks:
+        bvid = fb.get("bvid", "")
+        action = fb.get("action", "")
+        cat = bvid_to_cat.get(bvid, "其他")
+        if cat not in cat_stats:
+            cat_stats[cat] = {"like": 0, "dislike": 0}
+        if action == "like":
+            cat_stats[cat]["like"] += 1
+        elif action == "dislike":
+            cat_stats[cat]["dislike"] += 1
+    
+    # 调整关键词
+    adjusted = list(KEYWORDS)  # 基础关键词始终保留
+    boost_cats = []
+    reduce_cats = []
+    
+    for cat, stats in cat_stats.items():
+        total = stats["like"] + stats["dislike"]
+        if total < 2:
+            continue  # 样本太少，跳过
+        like_ratio = stats["like"] / total
+        if like_ratio >= 0.7:
+            boost_cats.append(cat)
+            # 添加该分类的额外关键词（最多3个）
+            extra = CAT_KEYWORDS.get(cat, [])
+            adjusted.extend(extra[:3])
+        elif like_ratio <= 0.3:
+            reduce_cats.append(cat)
+            # 从列表中移除该分类的关键词
+            cat_kws = CAT_KEYWORDS.get(cat, [])
+            adjusted = [k for k in adjusted if k not in cat_kws]
+    
+    if boost_cats or reduce_cats:
+        print(f"📊 搜索关键词根据反馈调整:")
+        if boost_cats:
+            print(f"   ⬆️ 增加: {', '.join(boost_cats)}")
+        if reduce_cats:
+            print(f"   ⬇️ 减少: {', '.join(reduce_cats)}")
+        print(f"   🔍 关键词数: {len(KEYWORDS)} → {len(adjusted)}")
+    
+    return adjusted
+
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
                   "(KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
@@ -103,10 +193,12 @@ def scrape_bilibili(keyword: str, page: int = 1, pages: int = 2) -> list:
 
 
 def scrape_all() -> list:
-    """遍历所有关键词，去重后返回"""
+    """遍历所有关键词（根据反馈调整后），去重后返回"""
+    # 根据用户反馈调整关键词
+    keywords = load_feedback_adjusted_keywords()
     all_items = []
     seen_aid = set()
-    for kw in KEYWORDS:
+    for kw in keywords:
         print(f"🔍 抓取: {kw}")
         items = scrape_bilibili(kw)
         for item in items:
