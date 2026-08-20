@@ -45,6 +45,63 @@ def call_gemini(prompt: str) -> str | None:
         return None
 
 
+def fallback_score(batch: list) -> list:
+    """基于规则的评分 fallback：根据标题关键词匹配分类和评分"""
+    # 分类关键词规则：(关键词列表, 分类名)
+    cat_rules = [
+        (["新番", "动画", "番剧", "连载", "放送", " anime", "Anime"], "新番"),
+        (["cos", "Cos", "COS", "cosplay", "角色扮演", "妆造"], "Cosplay"),
+        (["vtuber", "Vtuber", "VTUBER", "虚拟主播", "虚拟偶像"], "Vtuber"),
+        (["游戏", "game", "Game", "电竞", "通关", "攻略", "原神", "王者", "LOL"], "游戏"),
+        (["声优", "配音", "cv", "CV", "声优阵", "角色歌"], "声优"),
+        (["漫画", "连载", "连载", "动漫杂谈", "新番介绍", "新番导视"], "动漫梗"),
+        (["手办", "模型", "figma", "景品", "周边", "谷子"], "手办模型"),
+        (["漫展", "comic", "Comic", "同人", "only", "イベント"], "漫展"),
+        (["业界", "动画公司", "制作委员会", "崩坏", "经费", "作画"], "业界"),
+        (["日本", "武士", "忍者", "和服", "神社", "二次元文化"], "日本文化"),
+    ]
+
+    # 基础分 + 关键词加分
+    results = []
+    for item in batch:
+        title = item.get("title", "")
+        score = 50  # 基础分
+        assigned_cat = "其他"
+
+        # 根据关键词匹配分类和加分
+        for keywords, cat in cat_rules:
+            if any(kw in title for kw in keywords):
+                assigned_cat = cat
+                score += 15
+                break
+
+        # 标题长度适中加分
+        if 10 <= len(title) <= 40:
+            score += 5
+
+        # 有 emoji 加分
+        if any(ord(c) > 0x1F000 for c in title):
+            score += 10
+
+        # 包含数字/梗加分
+        if any(ch in title for ch in "0123456789"):
+            score += 5
+
+        # 限制在 30-95 之间
+        score = max(30, min(95, score))
+
+        # 生成简单摘要
+        summary = title[:50] if len(title) <= 50 else title[:47] + "..."
+
+        results.append({
+            "category": assigned_cat,
+            "score": score,
+            "summary": summary
+        })
+
+    return results
+
+
 def load_feedback_weights():
     """读取 feedback.json，计算每个分类的喜欢/不喜欢比率，返回权重提示"""
     feedback_path = OUTPUT_DIR / "feedback.json"
@@ -166,28 +223,34 @@ def main():
 
     result = call_gemini(prompt)
     if not result:
-        print("❌ Gemini 调用失败")
-        return
-
-    # 提取 JSON
-    # 有时 Gemini 会在 JSON 前后加 ```json ... ```
-    text = result.strip()
-    if text.startswith("```"):
-        text = text.split("\n", 1)[1].rsplit("```", 1)[0]
-    try:
-        scores = json.loads(text)
-    except json.JSONDecodeError:
-        # 尝试找第一个 [ 到最后一个 ]
-        start = text.find("[")
-        end = text.rfind("]")
-        if start >= 0 and end > start:
-            scores = json.loads(text[start:end + 1])
-        else:
-            print("❌ 无法解析 JSON")
-            print(text[:500])
+        print("⚠️ Gemini 调用失败，启用 fallback 规则评分...")
+        scores = fallback_score(batch)
+        if not scores:
+            print("❌ 评分失败，退出")
             return
+        print(f"✅ fallback 评分完成: {len(scores)} 条")
+    else:
+        # 提取 JSON
+        # 有时 Gemini 会在 JSON 前后加 ```json ... ```
+        text = result.strip()
+        if text.startswith("```"):
+            text = text.split("\n", 1)[1].rsplit("```", 1)[0]
+        try:
+            scores = json.loads(text)
+        except json.JSONDecodeError:
+            # 尝试找第一个 [ 到最后一个 ]
+            start = text.find("[")
+            end = text.rfind("]")
+            if start >= 0 and end > start:
+                scores = json.loads(text[start:end + 1])
+            else:
+                print("❌ 无法解析 JSON，使用 fallback 规则评分...")
+                scores = fallback_score(batch)
+                if not scores:
+                    print("❌ 评分失败，退出")
+                    return
 
-    print(f"✅ AI 富化完成: {len(scores)} 条")
+        print(f"✅ AI 富化完成: {len(scores)} 条")
 
     # 合并结果
     enriched = []
@@ -198,7 +261,7 @@ def main():
         enriched.append(item)
 
     # 输出 Markdown 日报
-    today = "2026-08-18"
+    today = datetime.now().strftime("%Y-%m-%d")
     lines = [f"# 🎌 二次元趣闻日报 · {today}\n",
              f"> AI 评分 + 分类 · Gemini 富化版\n"]
 
