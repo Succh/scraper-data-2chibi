@@ -43,7 +43,7 @@ jobs:
         working-directory: .
         run: |
           cat > .env << EOF
-          GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}
+          MODELSCOPE_API_KEY=${{ secrets.MODELSCOPE_API_KEY }}
           NOTION_TOKEN=${{ secrets.NOTION_TOKEN }}
           NOTION_DATABASE_ID=${{ secrets.NOTION_DATABASE_ID }}
           BILI_COOKIE=${{ secrets.BILI_COOKIE }}
@@ -52,7 +52,7 @@ jobs:
           EOF
           echo "✅ .env 已创建"
           # 验证 key 存在（不输出值）
-          grep -q "GEMINI_API_KEY=." .env && echo "  GEMINI_API_KEY: ✓"
+          grep -q "MODELSCOPE_API_KEY=." .env && echo "  MODELSCOPE_API_KEY: ✓"
           grep -q "NOTION_TOKEN=." .env && echo "  NOTION_TOKEN: ✓"
           grep -q "NOTION_DATABASE_ID=." .env && echo "  NOTION_DATABASE_ID: ✓"
           grep -q "BILI_COOKIE" .env && echo "  BILI_COOKIE: ✓"

@@ -20,28 +20,37 @@ def load_dotenv():
     return env
 
 _env = {**os.environ, **load_dotenv()}
-GEMINI_KEY = _env.get("GEMINI_API_KEY", "")
+MODELSCOPE_KEY = _env.get("MODELSCOPE_API_KEY", "")
 ssl_ctx = ssl.create_default_context()
 ssl_ctx.check_hostname = False
 ssl_ctx.verify_mode = ssl.CERT_NONE
 
 OUTPUT_DIR = Path(__file__).parent / "output"
 
+# 魔搭 API 配置
+MODELSCOPE_URL = "https://api-inference.modelscope.cn/v1/chat/completions"
+MODELSCOPE_MODEL = "mistralai/Mistral-Large-Instruct-2407"
 
-def call_gemini(prompt: str) -> str | None:
-    url = (f"https://generativelanguage.googleapis.com/v1beta/models/"
-           f"gemini-3-flash-preview:generateContent?key={GEMINI_KEY}")
+
+def call_ai(prompt: str) -> str | None:
+    """调用魔搭 API（Mistral Large）进行 AI 富化"""
     payload = json.dumps({
-        "contents": [{"role": "user", "parts": [{"text": prompt}]}]
+        "model": MODELSCOPE_MODEL,
+        "messages": [{"role": "user", "content": prompt}],
+        "max_tokens": 800,
+        "temperature": 0.7
     }).encode()
-    req = urllib.request.Request(url, data=payload,
-                                 headers={"Content-Type": "application/json"})
+    req = urllib.request.Request(MODELSCOPE_URL, data=payload,
+                                 headers={
+                                     "Authorization": f"Bearer {MODELSCOPE_KEY}",
+                                     "Content-Type": "application/json"
+                                 })
     try:
-        with urllib.request.urlopen(req, timeout=30, context=ssl_ctx) as resp:
+        with urllib.request.urlopen(req, timeout=120, context=ssl_ctx) as resp:
             data = json.loads(resp.read())
-        return data["candidates"][0]["content"]["parts"][0]["text"]
+        return data["choices"][0]["message"]["content"]
     except Exception as e:
-        print(f"  ❌ Gemini 错误: {str(e)[:200]}")
+        print(f"  ❌ 魔搭 API 错误: {str(e)[:200]}")
         return None
 
 
@@ -221,7 +230,7 @@ def main():
         + "\n" + "\n".join(examples)
     )
 
-    result = call_gemini(prompt)
+    result = call_ai(prompt)
     if not result:
         print("⚠️ Gemini 调用失败，启用 fallback 规则评分...")
         scores = fallback_score(batch)
