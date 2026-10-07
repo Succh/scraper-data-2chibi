@@ -91,7 +91,7 @@ jobs:
           fi
           
           # 添加 output 目录的变更
-          git add output/ docs/ .github/
+          git add docs/ .github/
           
           # 提交
           TODAY=$(date +%Y-%m-%d)
@@ -113,5 +113,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: daily-output-${{ github.run_number }}
-          path: scraper-data-2chibi/output/
+          path: output/
           retention-days: 7
